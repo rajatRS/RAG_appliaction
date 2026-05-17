@@ -1,8 +1,8 @@
-# 🚀 AI Hackathon RAG Boilerplate
+# 🚀 RAG Application
 
-A hackathon-ready boilerplate for building an enterprise-grade Retrieval-Augmented Generation (RAG) system. This project features a clean separation of concerns with a **Python/FastAPI Backend** and a lightning-fast **React/Vite Frontend**. 
+An enterprise-grade, high-performance Retrieval-Augmented Generation (RAG) system. This project features a clean separation of concerns with a **Python/FastAPI Backend** and a lightning-fast **React/Vite Frontend**. 
 
-It is designed to give you a massive structural and aesthetic advantage in any AI hackathon.
+It is designed to provide a robust, production-ready environment for document ingestion, multi-query retrieval, and automatic evaluations.
 
 ## 🌟 Key Features
 
@@ -74,7 +74,7 @@ If you want to unlock **True Hybrid Search (Dense + Sparse)** and serverless sca
 
 ## 📊 Automated RAG Evaluation
 
-The boilerplate features a highly optimized, multithreaded evaluation pipeline to empirically grade your system.
+The RAG application features a highly optimized, multithreaded evaluation pipeline to empirically grade your system.
 
 ### How it works:
 1. **Tests Upload:** Switch to the **RAG Evaluator** tab in the sidebar and upload a `tests.jsonl` file.
