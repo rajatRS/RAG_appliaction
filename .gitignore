@@ -1,0 +1,25 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Local secrets & databases
+.env
+data/
+
+# Hackathon local node isolation folder
+.local_node/
+
+# Frontend dependencies
+node_modules/
+frontend/node_modules/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
