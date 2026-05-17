@@ -29,25 +29,34 @@ cp .env.example .env
 ```
 
 ### 2. Install Dependencies (Backend & Frontend)
-This command will use `uv` to install Python dependencies, and it will automatically use our isolated local Node.js binary to install your React dependencies.
+First, sync the Python dependencies for the backend, then install the Node dependencies for the frontend.
+
+**Backend Setup:**
 ```bash
-make install
+uv sync
+```
+
+**Frontend Setup:**
+```bash
+cd frontend
+npm install
 ```
 
 ## 🚀 Running the Application
 
-Because this is a modern, separated stack, you must run the backend and the frontend concurrently in two different terminal tabs.
+Because this is a modern, separated stack, you must run the backend and the frontend concurrently in two different terminal windows.
 
-### Terminal 1: Start the Backend
+### Terminal 1: Start the Backend (from project root)
 ```bash
-make dev-backend
+uv run uvicorn src.main:app --reload
 ```
 - **FastAPI Server:** Runs on `http://localhost:8000`
 - **Swagger API Docs:** Available at [http://localhost:8000/docs](http://localhost:8000/docs)
 
-### Terminal 2: Start the Frontend
+### Terminal 2: Start the Frontend (from project root)
 ```bash
-make dev-frontend
+cd frontend
+npm run dev
 ```
 - **React UI:** Available at [http://localhost:5173](http://localhost:5173)
 
@@ -61,7 +70,7 @@ If you want to unlock **True Hybrid Search (Dense + Sparse)** and serverless sca
 1. **Create an Index:** Log in to your Pinecone dashboard and create an index.
 2. **Critical Metric Setting:** You **MUST** select the **`dotproduct`** metric. If you select Cosine or Euclidean, Pinecone will reject the sparse vectors, and the hybrid bulk upsert will crash!
 3. **Update `.env`:** Add your `PINECONE_API_KEY`, your `PINECONE_INDEX_NAME`, and set `VECTOR_STORE_TYPE=pinecone`.
-4. **Restart Backend:** Stop your backend server (Ctrl+C) and run `make dev-backend` to ensure the environment variables are loaded.
+4. **Restart Backend:** Stop your backend server (Ctrl+C) and run `uv run uvicorn src.main:app --reload` to ensure the environment variables are loaded.
 5. **Toggle in UI:** In the React interface, flip the "Pinecone Vector Store" toggle to ON. You will immediately see the "Dense Only", "Sparse Only", and "Hybrid" buttons appear, giving you full control over the Pinecone SDK querying logic!
 
 ## 📁 Architecture Overview
