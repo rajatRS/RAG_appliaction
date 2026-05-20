@@ -33,6 +33,22 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           <span className="nav-icon">📊</span>
           RAG Evaluator
         </button>
+
+        <button 
+          className={`nav-item ${activeTab === 'agent' ? 'active' : ''}`}
+          onClick={() => setActiveTab('agent')}
+        >
+          <span className="nav-icon">🤖</span>
+          Agent Studio
+        </button>
+
+        <button 
+          className={`nav-item ${activeTab === 'orchestrator' ? 'active' : ''}`}
+          onClick={() => setActiveTab('orchestrator')}
+        >
+          <span className="nav-icon">🌌</span>
+          Multimodal Studio
+        </button>
       </nav>
       
       <div className="sidebar-footer">

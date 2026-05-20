@@ -170,3 +170,86 @@ async def process_evaluation(file: UploadFile, top_k: int = 5, vector_store: str
     results = run_full_evaluation(tests, k=top_k, vector_store=vector_store, model_name=model_name)
     
     return {"results": [r.model_dump() for r in results]}
+
+async def get_agent_config() -> dict:
+    from src.rag.agent import load_agent_config
+    return load_agent_config()
+
+async def update_agent_config(config_dict: dict) -> dict:
+    from src.rag.agent import save_agent_config
+    save_agent_config(config_dict)
+    return {"message": "Agent configured successfully."}
+
+async def process_agent_dataset(file: UploadFile) -> dict:
+    from src.rag.agent import save_agent_dataset
+    import csv
+    import json
+    
+    content = await file.read()
+    filename = file.filename or "dataset.json"
+    
+    dataset = []
+    if filename.endswith(".csv"):
+        import io
+        stream = io.StringIO(content.decode("utf-8"))
+        reader = csv.DictReader(stream)
+        for row in reader:
+            dataset.append({
+                "title": row.get("title", "Legacy Incident Log"),
+                "category": row.get("category", "General"),
+                "description": row.get("description", ""),
+                "resolution": row.get("resolution", "")
+            })
+    else:
+        # Assume JSON
+        try:
+            raw_data = json.loads(content.decode("utf-8"))
+            if isinstance(raw_data, list):
+                dataset = raw_data
+            else:
+                dataset = [raw_data]
+        except Exception as e:
+            raise ValueError(f"Failed to parse JSON dataset: {e}")
+            
+    save_agent_dataset(dataset)
+    return {
+        "message": f"Successfully loaded legacy resolution dataset ({len(dataset)} items).",
+        "items_count": len(dataset)
+    }
+
+async def process_agent_triage(ticket_text: str) -> dict:
+    from src.rag.agent import run_agent_triage
+    ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"\n[{ts}] [Agent Engine] Executing triage agent on incoming ticket...")
+    result = await run_agent_triage(ticket_text)
+    ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{ts}] [Agent Engine] ✓ Triage completed!")
+    return result
+
+async def process_orchestrator_diagnostics(
+    ticket_text: str,
+    image_file: UploadFile = None,
+    active_subagents_str: str = "[]"
+) -> dict:
+    import base64
+    from src.rag.multimodal_orchestrator import run_orchestration_pipeline
+    
+    image_base64 = None
+    if image_file:
+        content = await image_file.read()
+        image_base64 = base64.b64encode(content).decode("utf-8")
+        
+    try:
+        active_subagents = json.loads(active_subagents_str)
+    except Exception:
+        active_subagents = [s.strip().lower() for s in active_subagents_str.split(",") if s.strip()]
+        
+    return await run_orchestration_pipeline(
+        ticket_text=ticket_text,
+        image_base64=image_base64,
+        active_subagents=active_subagents
+    )
+
+async def archive_orchestrator_resolution(resolved_case: dict) -> dict:
+    from src.rag.multimodal_orchestrator import archive_resolution_to_logs
+    return archive_resolution_to_logs(resolved_case)

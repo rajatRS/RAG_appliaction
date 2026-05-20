@@ -77,3 +77,91 @@ export const evaluateSystem = async (file, topK, vectorStore, modelName) => {
 
   return response.json();
 };
+
+export const fetchAgentConfig = async () => {
+  const response = await fetch(`${API_BASE}/agent/config`);
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(err);
+  }
+  return response.json();
+};
+
+export const updateAgentConfig = async (config) => {
+  const response = await fetch(`${API_BASE}/agent/config`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(config),
+  });
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(err);
+  }
+  return response.json();
+};
+
+export const uploadAgentDataset = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await fetch(`${API_BASE}/agent/dataset`, {
+    method: "POST",
+    body: formData,
+  });
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(err);
+  }
+  return response.json();
+};
+
+export const runAgentTriage = async (ticketText) => {
+  const response = await fetch(`${API_BASE}/agent/run`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ ticket_text: ticketText }),
+  });
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(err);
+  }
+  return response.json();
+};
+
+export const runOrchestration = async (ticketText, imageFile, activeSubagents) => {
+  const formData = new FormData();
+  formData.append("ticket_text", ticketText);
+  if (imageFile) {
+    formData.append("image_file", imageFile);
+  }
+  formData.append("active_subagents", JSON.stringify(activeSubagents));
+
+  const response = await fetch(`${API_BASE}/orchestrator/run`, {
+    method: "POST",
+    body: formData,
+  });
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(err);
+  }
+  return response.json();
+};
+
+export const archiveOrchestrationCase = async (resolvedData) => {
+  const response = await fetch(`${API_BASE}/orchestrator/archive`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(resolvedData),
+  });
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(err);
+  }
+  return response.json();
+};

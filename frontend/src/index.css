@@ -1,16 +1,16 @@
 :root {
-  --bg-color: #0b1120;
-  --bg-panel: #111827;
-  --bg-input: #1f2937;
-  --text-main: #f3f4f6;
-  --text-muted: #9ca3af;
-  --accent: #4f46e5;
-  --accent-hover: #4338ca;
-  --border: #374151;
-  --success: #10b981;
-  --error: #ef4444;
-  --gradient-btn: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-  --gradient-btn-hover: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+  --bg-color: #f1f5f9;
+  --bg-panel: #ffffff;
+  --bg-input: #f8fafc;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --border: #cbd5e1;
+  --success: #059669;
+  --error: #dc2626;
+  --gradient-btn: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  --gradient-btn-hover: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
 }
 
 * {
@@ -27,8 +27,8 @@ body {
   width: 100vw;
   overflow: hidden;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.08) 0px, transparent 50%);
 }
 
 /* Main Layout */
@@ -50,12 +50,12 @@ body {
 
 /* Common UI Elements */
 .section {
-  background: rgba(17, 24, 39, 0.7);
+  background: rgba(255, 255, 255, 0.65);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 16px;
   padding: 28px;
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(148, 163, 184, 0.08);
 }
 
 h3 {
@@ -81,7 +81,7 @@ label {
 
 input[type="text"], input[type="file"], input[type="number"], select, textarea {
   width: 100%;
-  background: rgba(31, 41, 55, 0.5);
+  background: var(--bg-input);
   border: 1px solid var(--border);
   color: var(--text-main);
   padding: 14px 16px;
@@ -92,9 +92,9 @@ input[type="text"], input[type="file"], input[type="number"], select, textarea {
 
 input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
   outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-  background: rgba(31, 41, 55, 0.8);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  background: #ffffff;
 }
 
 input[type="file"] {

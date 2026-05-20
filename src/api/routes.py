@@ -71,3 +71,74 @@ async def run_evaluation(
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
+class AgentConfigRequest(BaseModel):
+    name: str
+    instructions: str
+    model_name: str
+    temperature: float
+    knowledge_source: str
+
+class AgentRunRequest(BaseModel):
+    ticket_text: str
+
+@router.get("/agent/config", summary="Retrieve active Agent configuration")
+async def get_agent_configuration():
+    try:
+        return await services.get_agent_config()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/agent/config", summary="Save or update Agent configuration")
+async def update_agent_configuration(request: AgentConfigRequest):
+    try:
+        return await services.update_agent_config(request.model_dump())
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/agent/dataset", summary="Upload CSV/JSON legacy resolution logs for the Agent")
+async def upload_agent_dataset_file(file: UploadFile = File(...)):
+    try:
+        return await services.process_agent_dataset(file)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/agent/run", summary="Run Agent triage on a new ticket")
+async def run_agent_triage_process(request: AgentRunRequest):
+    try:
+        return await services.process_agent_triage(request.ticket_text)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/orchestrator/run", summary="Run Multimodal Orchestration pipeline")
+async def run_orchestration_diagnostics(
+    ticket_text: str = Form(...),
+    image_file: UploadFile = File(None),
+    active_subagents: str = Form("[]")
+):
+    try:
+        return await services.process_orchestrator_diagnostics(
+            ticket_text=ticket_text,
+            image_file=image_file,
+            active_subagents_str=active_subagents
+        )
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
+
+class ArchiveCaseRequest(BaseModel):
+    customer_name: str
+    department: str
+    issue_category: str
+    priority: str
+    issue_description: str
+    resolution_steps: List[str]
+    resolution_summary: str
+
+@router.post("/orchestrator/archive", summary="Archive a resolved Orchestration case into Agent's training logs")
+async def archive_orchestrator_case(request: ArchiveCaseRequest):
+    try:
+        return await services.archive_orchestrator_resolution(request.model_dump())
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
